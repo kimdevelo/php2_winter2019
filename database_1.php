@@ -3,6 +3,7 @@
 function getConnection()
 {
     if (!isset($link)) {
+        //Static in this contex - store it below/elsewehre when getConnection start, $link store in the memory
         static $link = NULL;
     }
     
