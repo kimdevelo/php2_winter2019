@@ -78,13 +78,15 @@ if (isset($_POST['submit'])
         $validSession = session_secure_init();
     
     }
-    
+
+    //Filtering
     $username = (string) $_POST['username'];
     
     $password = (string) $_POST['password'];
     
     if (!ctype_alpha($username)) {
     
+        //Sanitizing
         $username = preg_replace("/[^a-zA-Z]+/", "", $username);
     
     }
