@@ -1,94 +1,55 @@
 <?php
 
-function getConnection($getLink = TRUE)
-{
-    static $link = NULL;
-
-    if ($link === NULL) {
-        $link = mysqli_connect('localhost:3307', 'root', '', 'login');
-    
-    } elseif ($getLink === FALSE) {
-
-        mysqli_close($link);
-
-    }
-
-    return $link;
-}
-
-
-function getQuote()
-{
-
-    return "'";
-}
-
-
-function queryResults($query)
-{
-
-    $link = getConnection();
-    $result = mysqli_query($link, $query);
-    $values = mysqli_fetch_assoc($result);
-    getConnection(FALSE);
-    return $values;
-}
-
-
-function checkLogin($username, $password)
-{
-
-    $query = 'SELECT `username`, `password` FROM `users` WHERE `username` LIKE ' . getQuote() . $username . getQuote();
-
-    $values = queryResults($query);
-
-    $passwordVerified = password_verify($password, $values['password']);
-
-    return $passwordVerified;
-
-}
-
-
 class DataStore
 {
-    protected $username;
-    protected $password;
 
-
-    /**
-     * @return string
-     */
-    public function getUsername()
+    function getConnection($getLink = TRUE)
     {
+        static $link = NULL;
 
-        return $this->username;
-    }
-    /**
-     * @param string $firstName
-     * @return DataStore
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-        return $this;
+        if ($link === NULL) {
+
+            $link = mysqli_connect('localhost:3307', 'loginuser', 'testpass', 'login');
+
+        } elseif ($getLink === FALSE) {
+
+            mysqli_close($link);
+
+        }
+
+        return $link;
     }
 
-    /**
-     * @return string
-     */
-    public function getPassword()
+
+    function getQuote()
     {
 
-        return $this->password;
+        return "'";
     }
-    /**
-     * @param string $lastName
-     * @return DataStore
-     */
-    public function setPassword($password)
+
+
+    function queryResults($query)
     {
-        $this->password = $password;
-        return $this;
+
+        $link = $this->getConnection();
+        $result = mysqli_query($link, $query);
+        $values = mysqli_fetch_assoc($result);
+        $this->getConnection(FALSE);
+        return $values;
     }
-    
+
+
+    function checkLogin($username, $password)
+    {
+
+        $query = 'SELECT `username`, `password` FROM `users` WHERE `username` LIKE ' . $this->getQuote() . $username . $this->getQuote();
+
+        $values = $this->queryResults($query);
+
+        $passwordVerified = password_verify($password, $values['password']);
+
+        return $passwordVerified;
+
+    }
+
 }

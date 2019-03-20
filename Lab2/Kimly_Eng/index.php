@@ -1,9 +1,10 @@
 <?php
 
-require 'IndexController.php'; // autoloading
+require 'IndexController.php';
 
-// routing
 
-$app = new IndexController();
+$dataStore = new DataStore();
+
+$app = new IndexController($dataStore);
 
 $app->indexAction();
